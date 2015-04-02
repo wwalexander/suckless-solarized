@@ -1,0 +1,47 @@
+--- config.h	2015-03-31 05:37:49.873770618 -0700
++++ config.h.new	2015-03-31 05:37:20.430728774 -0700
+@@ -1,13 +1,14 @@
++
+ /* modifier 0 means no modifier */
+ static char *useragent      = "Mozilla/5.0 (X11; U; Unix; en-US) "
+ 	"AppleWebKit/537.15 (KHTML, like Gecko) Chrome/24.0.1295.0 "
+ 	"Safari/537.15 Surf/"VERSION;
+-static char *progress       = "#0000FF";
+-static char *progress_untrust = "#FF0000";
+-static char *progress_trust = "#00FF00";
+-static char *progress_proxy = "#FFFF00";
++static char *progress       = "#268BD2";
++static char *progress_untrust = "#DC322F";
++static char *progress_trust = "#859900";
++static char *progress_proxy = "#B58900";
+ static char *progress_proxy_trust = "#66FF00";
+-static char *progress_proxy_untrust = "#FF6600";
++static char *progress_proxy_untrust = "#CB4B16";
+ static char *stylefile      = "~/.surf/style.css";
+ static char *scriptfile     = "~/.surf/script.js";
+ static char *cookiefile     = "~/.surf/cookies.txt";
+@@ -24,13 +25,23 @@
+ static Bool loadimages = TRUE;
+ static Bool hidebackground  = FALSE;
+ 
++#ifdef LIGHT
++#define SETPROP(p, q) { \
++	.v = (char *[]){ "/bin/sh", "-c", \
++		"prop=\"`xprop -id $2 $0 | cut -d '\"' -f 2 | dmenu -nb '#fdf6e3' -nf '#839496' -sb '#586e75' -sf '#fdf6e3'`\" &&" \
++		"xprop -id $2 -f $1 8s -set $1 \"$prop\"", \
++		p, q, winid, NULL \
++	} \
++}
++#else
+ #define SETPROP(p, q) { \
+ 	.v = (char *[]){ "/bin/sh", "-c", \
+-		"prop=\"`xprop -id $2 $0 | cut -d '\"' -f 2 | dmenu`\" &&" \
++		"prop=\"`xprop -id $2 $0 | cut -d '\"' -f 2 | dmenu -nb '#002b36' -nf '#657b83' -sb '#93a1a1' -sf '#002b36'`\" &&" \
+ 		"xprop -id $2 -f $1 8s -set $1 \"$prop\"", \
+ 		p, q, winid, NULL \
+ 	} \
+ }
++#endif
+ 
+ /* DOWNLOAD(URI, referer) */
+ #define DOWNLOAD(d, r) { \
